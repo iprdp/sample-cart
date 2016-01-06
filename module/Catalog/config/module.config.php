@@ -5,16 +5,26 @@ namespace Catalog;
 return [
 	'router' => [ 
 		'routes' => [ 
-			'catalog_index' => [
+			'catalog_category' => [
 				'type' => 'literal',
 				'options' => [
-					'route'    => '/index',
+					'route'    => '/category',
 					'defaults' => [
 						'controller' => 'Catalog\Controller\ProductCategory',
-						'action'     => 'index',
+						'action'     => 'viewCategory',
 					],
 				],
-			],
+			],          
+            'catalog_product' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/product',
+                    'defaults' => [
+                        'controller' => 'Catalog\Controller\ProductCategory',
+                        'action'     => 'viewProduct',
+                    ],
+                ],
+            ],
 		],
 	],
 	'service_manager' => [
@@ -28,12 +38,8 @@ return [
 		],
 	],
 	'view_manager' => [
-        'template_map' => array(
-            'catalog/product-category/index' 
-                => __DIR__ . '/../view/catalog/product-category/index.phtml',
-        ),
-		'template_path_stack' => [
-            __DIR__ . '/../view',
+        'template_path_stack' => [
+            'catalog' => __DIR__ . '/../view',
 		],
 	],
 	'doctrine' => [

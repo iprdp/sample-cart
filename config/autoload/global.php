@@ -57,7 +57,7 @@ return array(
         'not_found_template'        => 'error/404',
     ),
 	'host' => array(
-		'server_name'   => 'project.dev',
+		'server_name'   => 'sample-cart.dev',
 		'protocol'      => 'http',
 	),
 );

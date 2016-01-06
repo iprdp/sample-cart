@@ -7,7 +7,12 @@ use Zend\View\Model\ViewModel;
 
 class ProductCategoryController extends AbstractActionController 
 {
-	public function indexAction() 
+	public function viewCategoryAction() 
+	{
+	    return new ViewModel();
+	}
+	
+	public function viewProductAction()
 	{
 	    return new ViewModel();
 	}

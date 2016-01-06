@@ -3,10 +3,11 @@
 namespace Catalog\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Catalog\Entity\ProductCategory;
 
 /**
- * Class Account
- * @package Finance\Entity
+ * Class Product
+ * @package Catalog\Entity
  * @ORM\Entity
  * @ORM\Table(name="products")
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
@@ -22,13 +23,29 @@ class Product
     private $id;
     
     /**
-     * @ORM\Column(name="title", type="string", length=100, unique=true, nullable=false)
+     * @ORM\Column(name="title", type="string", length=100, unique=true, 
+     *      nullable=false)
      * @var string
      */
     protected $title;
     
     /**
-     * @ORM\Column(name="catalog_no", type="string", length=50, unique=true, nullable=false)
+     * @ORM\Column(name="make", type="string", length=100, unique=true, 
+     *      nullable=false)
+     * @var string
+     */
+    protected $make;
+    
+    /**
+     * @ORM\Column(name="model_no", type="string", length=100, unique=true, 
+     *      nullable=false)
+     * @var string
+     */
+    protected $modelNumber;
+    
+    /**
+     * @ORM\Column(name="catalog_no", type="string", length=50, unique=true, 
+     *      nullable=false)
      * @var string
      */
     protected $catalogNumber;
@@ -40,16 +57,25 @@ class Product
     protected $description;
     
     /**
-     * @ORM\Column(name="unit_price", type="float", precision=13, scale=3, nullable=false)
+     * @ORM\Column(name="unit_price", type="float", precision=13, scale=3, 
+     *      nullable=false)
      * @var float
      */
     protected $unitPrice;
     
     /**
-     * @ORM\Column(name="display_img", type="string", length=30, unique=true, nullable=false)
+     * @ORM\Column(name="display_img", type="string", length=30, unique=true, 
+     *      nullable=false)
      * @var string
      */
     protected $displayImage;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Catalog\Entity\ProductCategory", 
+     *      inversedBy="products", cascade={"refresh"})
+     * @var ProductCategory
+     */
+    protected $primaryCategory;
     
     public function getId()
     {
@@ -64,6 +90,26 @@ class Product
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+    
+    public function getMake()
+    {
+        return $this->make;
+    }
+    
+    public function setMake($make)
+    {
+        $this->make = $make;
+    }
+    
+    public function getModelNumber()
+    {
+        return $this->modelNumber();
+    }
+    
+    public function setModelNumber($modelNumber)
+    {
+        $this->modelNumber = $modelNumber;
     }
     
     public function getCatalogNumber()
@@ -104,5 +150,15 @@ class Product
     public function setDisplayImage($displayImage)
     {
         $this->displayImage = $displayImage;
+    }
+    
+    public function getPrimaryCategory()
+    {
+        return $this->primaryCategory;
+    }
+    
+    public function setPrimaryCategory(ProductCategory $category=null)
+    {
+        $this->primaryCategory = $category;
     }
 }

@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <?php echo $this->headTitle($this->translate('Sample Cart'))->setSeparator(' - ')->setAutoEscape(false) ?>
-
+    	
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
@@ -28,6 +28,12 @@
                   </ul>
                 </nav>
           	</div>
+            
+            <div class="row">
+            	<div class="pull-right">
+            		<a href="#">View Cart</a>
+            	</div>
+            </div>
             
             <?php echo $this->content; ?>
             

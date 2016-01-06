@@ -74,7 +74,7 @@ return array(
 	'session' => array(
 			'cache_expire' => 15,
 			'cookie_httponly' => true,
-			'cookie_domain' => 'project.dev',
+			'cookie_domain' => 'sample-cart.dev',
 			'cookie_lifetime' => 259200,
 			'cookie_secure' => false,
 			'remember_me_seconds' => 86400, //1 day

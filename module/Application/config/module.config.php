@@ -13,12 +13,12 @@ return array(
     'router' => array(
         'routes' => array(
             'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => 'segment',
                 'options' => array(
-                    'route'    => '/',
+                    'route'    => '/[index]',
                     'defaults' => array(
                         'controller' => 'Catalog\Controller\ProductCategory',
-                        'action'     => 'index',
+                        'action'     => 'viewCategory',
                     ),
                 ),
             ),
