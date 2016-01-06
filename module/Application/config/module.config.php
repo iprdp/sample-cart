@@ -24,55 +24,6 @@ return array(
             ),
         ),
     ),
-    'service_manager' => array(
-        'abstract_factories' => array(
-            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Zend\Log\LoggerAbstractServiceFactory',
-        ),
-        'factories' => array(
-            'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
-        		
-        		'Application\SessionManager' => function ($sm) {
-        		$config = $sm->get('Config');
-        		if (isset($config['session'])) {
-        			$session = $config['session'];
-        			$sessionConfig = null;
-        			if (isset($session)) {
-        				$sessionConfig = new \Zend\Session\Config\SessionConfig();
-        				$sessionConfig->setOptions($session);
-        			}
-        			$storagePath = '';
-        			if (isset($config['app_base_dir'])) {
-        				$storagePath = $config['app_base_dir'] . DIRECTORY_SEPARATOR;
-        			}
-        			$storagePath .= '/data/sessions/cache';
-        			$fileCacheStorage = new \Zend\Cache\Storage\Adapter\FileSystem([
-        				'cache_dir' => $storagePath,
-        			]);
-        			$sessionSaveHandler = new \Zend\Session\SaveHandler\Cache($fileCacheStorage);
-        		
-        			$sessionManager = new \Zend\Session\SessionManager(
-        				$sessionConfig,
-        				null,
-        				$sessionSaveHandler
-        			);
-        		
-        			if (isset($session['validators'])) {
-        				$chain = $sessionManager->getValidatorChain();
-        				foreach ($session['validators'] as $validator) {
-        					$validator = new $validator();
-        					$chain->attach('session.validate', array($validator, 'isValid'));
-        				}
-        			}
-        		} else {
-        			$sessionManager = new \Zend\Session\SessionManager();
-        		}
-        		\Zend\Session\Container::setDefaultManager($sessionManager);
-        		
-        		return $sessionManager;
-        		},
-        ),
-    ),
     'translator' => array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(

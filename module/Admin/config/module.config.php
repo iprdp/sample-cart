@@ -5,8 +5,8 @@ namespace Admin;
 return [
 	'router' => [ 
 		'routes' => [ 
-			'catalog_category' => [
-				'type' => 'literal',
+			'admin_home' => [
+				'type' => 'segment',
 				'options' => [
 					'route'    => '/admin[/[index]]',
 					'defaults' => [
@@ -14,17 +14,17 @@ return [
 						'action'     => 'home',
 					],
 				],
-			],          
-		],
-	],
-	'service_manager' => [
-		'factories' => [
-		],
-	],
-	'controllers' => [
-		'invokables' => [
-			'Admin\Controller\Login' => 
-		                'Admin\Controller\LoginController',
+			],
+		    'admin_login' => [
+		        'type' => 'literal',
+		        'options' => [
+		            'route'    => '/admin/login',
+		            'defaults' => [
+		                'controller' => 'Admin\Controller\Home',
+		                'action'     => 'login',
+		            ],
+		        ],
+		    ],
 		],
 	],
 	'view_manager' => [

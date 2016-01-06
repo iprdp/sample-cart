@@ -1,11 +1,4 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
 
 namespace Application;
 
@@ -13,6 +6,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Db\TableGateway\Feature\GlobalAdapterFeature;
 use Zend\Session\Container;
+use Doctrine\Common\Util\Debug;
 
 class Module
 {
@@ -41,11 +35,68 @@ class Module
         }
         
         Container::setDefaultManager($session);
+        
+        $this->bootstrapGlobalMvcEventErrorListener($e);
+        
+        $this->bootstrapSetLayouts($e);
     }
 
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+    
+    public function getServiceConfig()
+    {
+        return array(
+            'abstract_factories' => array(
+                'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
+                'Zend\Log\LoggerAbstractServiceFactory',
+            ),
+            'factories' => array(
+                'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
+
+                'Application\SessionManager' => function ($sm) {
+                    $config = $sm->get('Config');
+                    if (isset($config['session'])) {
+                        $session = $config['session'];
+                        $sessionConfig = null;
+                        if (isset($session)) {
+                            $sessionConfig = new \Zend\Session\Config\SessionConfig();
+                            $sessionConfig->setOptions($session);
+                        }
+                        $storagePath = '';
+                        if (isset($config['app_base_dir'])) {
+                            $storagePath = $config['app_base_dir'] . DIRECTORY_SEPARATOR;
+                        }
+                        $storagePath .= '/data/sessions/cache';
+                        $fileCacheStorage = new \Zend\Cache\Storage\Adapter\FileSystem([
+                                        'cache_dir' => $storagePath,
+                        ]);
+                        $sessionSaveHandler = new \Zend\Session\SaveHandler\Cache($fileCacheStorage);
+    
+                        $sessionManager = new \Zend\Session\SessionManager(
+                                $sessionConfig,
+                                null,
+                                $sessionSaveHandler
+                                );
+    
+                        if (isset($session['validators'])) {
+                            $chain = $sessionManager->getValidatorChain();
+                            foreach ($session['validators'] as $validator) {
+                                $validator = new $validator();
+                                $chain->attach('session.validate', array($validator, 'isValid'));
+                            }
+                        }
+                    } else {
+                        $sessionManager = new \Zend\Session\SessionManager();
+                    }
+                    \Zend\Session\Container::setDefaultManager($sessionManager);
+    
+                    return $sessionManager;
+                },
+            ),
+        );
     }
 
     public function getAutoloaderConfig()
@@ -56,6 +107,46 @@ class Module
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
             ),
+        );
+    }
+    
+    public function bootstrapGlobalMvcEventErrorListener(MvcEvent $event)
+    {
+        $eventManager = $event->getApplication()->getEventManager();
+    
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function(MvcEvent $event) {
+            $exception = $event->getParam('exception');
+    
+            if (isset($exception)) {
+                Debug::dump($exception, 10);
+            }
+    
+        }, 100);
+    }
+    
+    public function bootstrapSetLayouts(MvcEvent $e)
+    {
+        $eventManager = $e->getApplication()->getEventManager();
+        $eventManager->getSharedManager()->attach(
+            'Zend\Mvc\Controller\AbstractActionController',
+            'dispatch',
+            function(MvcEvent $e) {
+                $controller = $e->getTarget();
+                $controllerClass = get_class($controller);
+                $moduleNamespace = substr(
+                        $controllerClass,
+                        0,
+                        strpos($controllerClass, '\\')
+                        );
+                $layout = 'layout/layout';
+                // Module specific
+                switch ($moduleNamespace) {
+                    case 'Admin':
+                        $layout = 'layout/admin';
+                }
+
+                $controller->layout($layout);
+            }
         );
     }
 }

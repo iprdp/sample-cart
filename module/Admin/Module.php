@@ -2,6 +2,10 @@
 
 namespace Admin;
 
+use Zend\Mvc\Controller\ControllerManager;
+use Admin\Controller\HomeController;
+use Admin\Service\AuthenticationService;
+
 class Module 
 {
 	public function getConfig()
@@ -18,5 +22,30 @@ class Module
                 ),
 			),
 		);
+	}
+	
+	public function getServiceConfig()
+	{
+	    return [
+	        'factories' => [
+	            'Admin\AuthenticationService' => function() {
+	                return new AuthenticationService();
+	            },
+	        ],
+	    ];
+	}
+	
+	public function getControllerConfig()
+	{
+	    return [
+	        'factories' => [
+	            'Admin\Controller\Home' => function(ControllerManager $controllerManager) {
+	               $authService = $controllerManager->getServiceLocator()->get('Admin\AuthenticationService');
+	               $objectManager = $controllerManager->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+	               
+	               return new HomeController($authService, $objectManager);
+	            },
+            ],
+	    ];
 	}
 }
