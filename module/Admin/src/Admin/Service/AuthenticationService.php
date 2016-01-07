@@ -16,7 +16,7 @@ class AuthenticationService extends ZendAuthenticationService
     protected function createCallbackAdapter() 
     {
         $callbackFunction = function($identity, $password) {
-            return $identity;
+            return ($identity === 'admin') && ($password === 'sunshine');
         };
         
         return new CallbackAdapter($callbackFunction);

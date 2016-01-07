@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
 use Doctrine\Common\Persistence\ObjectManager;
+use Admin\Service\LoginService;
 
 class HomeController extends AbstractActionController 
 {
@@ -13,12 +14,16 @@ class HomeController extends AbstractActionController
     
     protected $objectManager;
     
+    protected $loginService;
+    
     public function __construct(
         AuthenticationService $authService, 
-        ObjectManager $objectManager
+        ObjectManager $objectManager,
+        LoginService $loginService
     ) {
         $this->setAuthenticationService($authService);
         $this->setObjectManager($objectManager);
+        $this->setLoginService($loginService);
     }
     
 	public function homeAction() 
@@ -34,6 +39,20 @@ class HomeController extends AbstractActionController
 	    if ($this->getAuthenticationService()->hasIdentity()) {
 	        $this->redirect()->toRoute('admin_home');
 	    }
+	    
+	    $request = $this->getRequest();
+	    $viewModel = new ViewModel();
+	    
+	    if ($request->isPost()) {
+	        $postData = $request->getPost();
+	        $this->getLoginService()->doLogin($postData);
+	           
+	        if ($this->getAuthenticationService()->hasIdentity()) {
+	            $this->redirect()->toRoute('admin_home');
+	        }
+	    } 
+	    
+	    return $viewModel;
 	}
 	
 	/**
@@ -52,5 +71,18 @@ class HomeController extends AbstractActionController
 	protected function setObjectManager($objectManager)
 	{
 	    $this->objectManager = $objectManager;
+	}
+	
+	protected function setLoginService($loginService)
+	{
+	    $this->loginService = $loginService;
+	}
+	
+	/**
+	 * @return LoginService
+	 */
+	protected function getLoginService()
+	{
+	    return $this->loginService;
 	}
 }
