@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Admin\Service\AuthenticationService;
 use Zend\View\Model\ViewModel;
 use Admin\Service\AdminCatalogService;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class CatalogProductController extends AbstractActionController 
 {
@@ -17,10 +18,12 @@ class CatalogProductController extends AbstractActionController
     
     public function __construct(
         AuthenticationService $authService, 
-        AdminCatalogService $adminCatalogService
+        AdminCatalogService $adminCatalogService,
+        ObjectManager $objectManager
     ) {
         $this->setAuthenticationService($authService);
         $this->setAdminCatalogService($adminCatalogService);
+        $this->setObjectManager($objectManager);
     }
     
 	public function viewCategoriesAction()
@@ -61,23 +64,37 @@ class CatalogProductController extends AbstractActionController
 	    }
 	    
 	    $request = $this->getRequest();
-	    $productId = $this->params()->fromRoute('id');
 	    $viewModel = new ViewModel();
+	    $product = null;
+	    $productId = $this->params()->fromRoute('id');
+	    $form = $this->getAdminCatalogService()->getCatalogProductForm(); 
 	    
-	    if ($request->isPost()) {
-	        $postData = $request->getPost()->toArray();
-	        $this->getAdminCatalogService()->processNewEditProduct(
-                $productId, 
-                $postData, 
-                $viewModel
-            );
-	    } else {
-	        $this->getAdminCatalogService()->processNewEditProduct(
-                $productId,
-                null,
-                $viewModel
-            );
+	    if (null != $productId) {
+	        $product = $this->getObjectManager()->find('Catalog\Entity\Product', $productId);
 	    }
+	    
+	    $fprg = $this->fileprg(
+            $form,
+            $this->url()->fromRoute('admin_product_edit', ['id'=>$productId]),
+            true
+        );
+	    
+	    if ($fprg instanceof \Zend\Http\PhpEnvironment\Response) {
+	        return $fprg;
+	    } elseif ($fprg === false) {
+	        $form->bind($product);
+	        $viewModel->setVariable('form', $form);
+	        return $viewModel;
+	    }
+	    
+	    if ($form->isValid()) {
+	        $product = $form->getObject();
+	        $this->getAdminCatalogService()->saveProduct($product);
+	        $viewModel->setVariable('success', true);
+	    } else {
+	        $viewModel->setVariable('success', false);   
+	    }
+	    $viewModel->setVariable('form', $form);
 	    
 	    return $viewModel;
 	}
@@ -106,5 +123,15 @@ class CatalogProductController extends AbstractActionController
 	protected function setAdminCatalogService($catalogService)
 	{
 	    $this->adminCatalogService = $catalogService;
+	}
+	
+	protected function setObjectManager($objectManager)
+	{
+	    $this->objectManager = $objectManager;
+	}
+	
+	protected function getObjectManager()
+	{
+	    return $this->objectManager;
 	}
 }

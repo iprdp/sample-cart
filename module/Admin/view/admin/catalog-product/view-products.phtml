@@ -16,11 +16,14 @@
 				<th style="width: 10%;" class="text-center">Primary Category</th>
 			</tr>
 		</thead>
-			    
     	<tbody>
     	<?php foreach ($products as $product) : ?>
     		<tr>
-    			<td class="text-center"><?= $product->getId(); ?></td>
+    			<td class="text-center">
+    				<a href="<?= $this->url('admin_product_edit', ['id'=>$product->getId()]); ?>">
+    					<?= $product->getId(); ?>
+    				</a>
+    			</td>
     			<td><?= $product->getTitle(); ?></td>
     			<td><?= $product->getCatalogNumber(); ?></td>
     			<td><?= $product->getMake(); ?></td>

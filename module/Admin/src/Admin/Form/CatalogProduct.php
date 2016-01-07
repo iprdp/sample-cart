@@ -42,6 +42,7 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                 'type' => 'hidden',
                 'attributes' => [
                     'required' => false,
+                    'class' => 'form-control',
                 ],
             ],
             [
@@ -52,6 +53,7 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                 ],
                 'attributes' => [
                     'required' => true,
+                    'class' => 'form-control',
                 ],
             ],
             [
@@ -62,6 +64,7 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                 ],
                 'attributes' => [
                     'required' => true,
+                    'class' => 'form-control',
                 ],
             ],
             [
@@ -72,6 +75,7 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                 ],
                 'attributes' => [
                     'required' => true,
+                    'class' => 'form-control',
                 ],
             ],
             [
@@ -82,6 +86,7 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                 ],
                 'attributes' => [
                     'required' => true,
+                    'class' => 'form-control',
                 ],
             ],
             [
@@ -93,8 +98,42 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                 'attributes' => [
                     'required' => true,
                     'rows' => 4,
+                    'class' => 'form-control',
                 ],
             ],  
+            [
+                'name' => 'unitPrice',
+                'type' => 'text',
+                'options' => [
+                    'label' => 'Unit Price',
+                ],
+                'attributes' => [
+                    'required' => true,
+                    'class' => 'form-control',
+                ],
+            ],
+            [
+                'name' => 'currencyCode',
+                'type' => 'text',
+                'options' => [
+                    'label' => 'Currency Code',
+                ],
+                'attributes' => [
+                    'required' => true,
+                    'class' => 'form-control',
+                ],
+            ],
+            [
+                'name' => 'displayImage',
+                'type' => 'file',
+                'options' => [
+                    'label' => 'Image',
+                ],
+                'attributes' => [
+                    'required' => true,
+                    'class' => 'form-control',
+                ],
+            ],
         ];
     }
     
@@ -122,6 +161,23 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                     ],
                 ],
             ],
+            'title' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    [
+                        'name' => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min' => 1,
+                            'max' => 500,
+                        ],
+                    ],
+                ],
+            ],
             'catalogNumber' => [
                 'required' => true,
                 'filters' => [
@@ -134,7 +190,7 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                         'options' => [
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 30,
+                            'max' => 50,
                         ],
                     ],
                 ],
@@ -151,7 +207,7 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                         'options' => [
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 30,
+                            'max' => 100,
                         ],
                     ],
                 ],
@@ -168,12 +224,36 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                         'options' => [
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 30,
+                            'max' => 50,
                         ],
                     ],
                 ],
             ],
             'description' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+            ],
+            'unitPrice' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                        [
+                            'name' => 'StringLength',
+                            'options' => [
+                                'min'   => 1,
+                                'max'   => 17,
+                            ],
+                        ],
+                        //['name' => 'Zend\I18n\Validator\IsFloat'],
+                    ],
+            ],
+            'currencyCode' => [
                 'required' => true,
                 'filters' => [
                     ['name' => 'StripTags'],
@@ -185,7 +265,33 @@ class CatalogProduct extends Form implements InputFilterProviderInterface
                         'options' => [
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 30,
+                            'max' => 10,
+                        ],
+                    ],
+                ],
+            ],
+            'displayImage' => [
+                'required' => false,
+                'filters' => [
+                    [
+                        'name' => 'Zend\Filter\File\RenameUpload',
+                        'options' => [
+                            'target' => './data/tmp',
+                            'randomize' => true,
+                        ],
+                    ],
+                ],
+                'validators' => [
+                    [
+                        'name' => 'filemimetype',
+                        'options' => [
+                            'mimetype' => 'image/png,image/x-png,image/jpeg',
+                        ],
+                    ],
+                    [
+                        'name' => 'filesize',
+                        'options' => [
+                            'max' => '4MB',
                         ],
                     ],
                 ],

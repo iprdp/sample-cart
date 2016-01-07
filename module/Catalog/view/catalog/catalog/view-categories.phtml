@@ -1,0 +1,78 @@
+<?php
+use Doctrine\Common\Util\Debug;
+try {
+    $showingAll = (isset($this->parentCategories));
+    $currentCategory = (isset($this->currentCategory)) ? 
+            $this->currentCategory : null; 
+    $parentCategories = (isset($this->parentCategories)) ? 
+            $this->parentCategories : array();
+    
+    $listCategories = ($showingAll) ? $parentCategories : 
+            $currentCategory->getChildren()->toArray();
+?>
+
+<?php if (!$showingAll): ?> 
+	<p><h3><?= $currentCategory->getTitle(); ?></h3></p>
+	<br>
+	
+	<?php $loopCategory = $currentCategory; ?>
+	<?php $parentChildList = array();?>
+	<?php while ($loopCategory != null) : ?>
+		<?php array_unshift($parentChildList, $loopCategory); ?>
+		<?php $loopCategory = $loopCategory->getParent();?>
+	<?php endwhile; ?>
+	<div class="row">
+		<div class="col-xs-6">
+    		<a href="<?= $this->url('catalog_view_categories', ['c_name' => '', 'c_id' => '']); ?>">
+    			Home		
+    		</a>
+    		<?php foreach($parentChildList as $category): ?>
+    			<?= ' > '; ?>
+    			<a href="<?= $this->url('catalog_view_categories', ['c_name' => $category->getTitle(), 'c_id' => $category->getId()]); ?>">
+    				<?= $category->getTitle(); ?>
+    			</a>
+    		<?php endforeach; ?>
+		</div>	
+	</div>
+<?php endif; ?>
+
+<div class="row">
+	<div class="col-xs-6 col-sm-3 col-md-2">
+		<h6>Sub-categories</h6>
+		<?php foreach ($listCategories as $category) : ?>
+			<a href="<?= $this->url('catalog_view_categories', ['c_name' => $category->getTitle(), 'c_id' => $category->getId()]); ?>">
+				<?= $category->getTitle(); ?>
+			</a>
+			<br>
+		<?php endforeach; ?>		
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-8">
+		<h6>Items</h6>
+		<?php if (!$showingAll): ?>
+			<?php array_push($listCategories, $currentCategory); ?>
+		<?php endif; ?>
+		<?php foreach ($listCategories as $category) : ?>
+			<?php foreach ($category->getProducts() as $product) : ?>
+    			<div class="row">
+    				<div class="col-xs-12 col-sm-3 col-md-1">
+    					<img src="<?= $product->getDisplayImage(); ?>" class="img-thumbnail">
+    					<br>
+    					<span><?= $product->getUnitPrice(); ?></span>
+    				</div>
+    				<div class="col-xs-12 col-sm-6 col-md-8">
+    					<?= $product->getTitle(); ?>					
+    				</div>
+    				<div class="col-xs-12 col-sm-3 col-md-1">
+    					<input type="button" class="btn btn-default" value="Add to cart">
+    				</div>			
+    			</div>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
+	</div>
+</div>
+<?php 
+} catch (\Exception $e) {
+    echo 'Unexpected error occurred.';
+    Debug::dump($e);
+}
+?>

@@ -3,6 +3,7 @@
 namespace Catalog\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Zend\View\Model\ViewModel;
 
 class CatalogService
 {
@@ -11,6 +12,27 @@ class CatalogService
     public function __construct(ObjectManager $objectManager)
     {
         $this->setObjectManager($objectManager);
+    }
+    
+    public function processViewCategories($categoryId, ViewModel $viewModel)
+    {
+        $category = null;
+        if (is_numeric($categoryId)) {
+            $category = $this->getObjectManager()->find(
+                'Catalog\Entity\ProductCategory', 
+                $categoryId
+            );
+        }
+        
+        if (isset($category)) {
+            $viewModel->setVariable('currentCategory', $category);
+        } else {
+            $parentCategories = $this->getObjectManager()
+                ->getRepository('Catalog\Entity\ProductCategory')->findBy([
+                    'parent' => null,
+                ]);
+            $viewModel->setVariable('parentCategories', $parentCategories);
+        }
     }
     
     public function getProductCategories()

@@ -1,4 +1,6 @@
 <?php
+use Doctrine\Common\Util\Debug;
+try {
     if (isset($this->form)) : 
         $form = $this->form;
         $form->prepare();
@@ -9,37 +11,85 @@
     
     <?= $this->formElement($form->get('id')); ?>
     
-    <div class="row">
-    	<div class="form-group">
-    		<?= $this->formLabel($form->get('title')); ?>
+    <?php if (isset($this->success)) : ?>
+        <div class="row">
+			<div class="col-xs-12">
+        	<?php if ($this->success === true) : ?> 
+        		<p class="text-success">Saved.</p>
+    		<?php else : ?>
+    			<p class="text-danger">Save failed.</p>
+			<?php endif; ?>
+			</div>
+        </div>
+    <?php endif; ?>
+    
+    <div class="row"> 
+    	<div class="form-group col-xs-12">
+    		<?= $this->formLabel($form->get('title')); ?><br>
     		<?= $this->formElement($form->get('title')); ?>
     		<?= $this->formElementErrors($form->get('title')); ?>
     	</div>
     </div>
     <div class="row">
-    	<div class="form-group">
-    		<?= $this->formLabel($form->get('catalogNumber')); ?>
+    	<div class="form-group col-xs-12 col-md-4">
+    		<?= $this->formLabel($form->get('catalogNumber')); ?><br>
     		<?= $this->formElement($form->get('catalogNumber')); ?>
     		<?= $this->formElementErrors($form->get('catalogNumber')); ?>
     	</div>
-    	<div class="form-group">
-    		<?= $this->formLabel($form->get('make')); ?>
+    	<div class="form-group col-xs-12 col-md-4">
+    		<?= $this->formLabel($form->get('make')); ?><br>
     		<?= $this->formElement($form->get('make')); ?>
     		<?= $this->formElementErrors($form->get('make')); ?>
     	</div>
-    	<div class="form-group">
-    		<?= $this->formLabel($form->get('modelNumber')); ?>
+    	<div class="form-group col-xs-12 col-md-4">
+    		<?= $this->formLabel($form->get('modelNumber')); ?><br>
     		<?= $this->formElement($form->get('modelNumber')); ?>
     		<?= $this->formElementErrors($form->get('modelNumber')); ?>
     	</div>
     </div>
     <div class="row">
-    	<div class="form-group">
-    		<?= $this->formLabel($form->get('description')); ?>
+    	<div class="form-group col-xs-12 col-md-4">
+    		<?= $this->formLabel($form->get('unitPrice')); ?><br>
+    		<?= $this->formElement($form->get('unitPrice')); ?>
+    		<?= $this->formElementErrors($form->get('unitPrice')); ?>
+    	</div>
+    	<div class="form-group col-xs-12 col-md-4">
+    		<?= $this->formLabel($form->get('currencyCode')); ?><br>
+    		<?= $this->formElement($form->get('currencyCode')); ?>
+    		<?= $this->formElementErrors($form->get('currencyCode')); ?>
+    	</div>
+    </div>
+    <div class="row">
+    	<div class="form-group col-xs-12">
+    		<?= $this->formLabel($form->get('description')); ?><br>
     		<?= $this->formElement($form->get('description')); ?>
     		<?= $this->formElementErrors($form->get('description')); ?>
     	</div>
     </div>
+    <div class="row">
+    	<div class="form-group col-xs-12">
+    		<img src="<?= $form->get('displayImage')->getValue(); ?>" 
+					class="img-rounded">
+    	</div>
+    	<div class="form-group col-xs-12">
+    		<?= $this->formLabel($form->get('displayImage')); ?><br>
+    		<?= $this->formElement($form->get('displayImage')); ?>
+    		<?= $this->formElementErrors($form->get('displayImage')); ?>
+    	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="form-group col-xs-12 text-center">
+    		<input type="submit" value="Save">
+    	</div>
+    </div>
     
     <?= $this->form()->closeTag(); ?>
-<?php endif; ?>
+<?php 
+endif;
+} catch (\Exception $e) {
+    // @TODO App should log exception since Zend does not propagate this error to the outer
+    Debug::dump($e);
+    echo 'Unexpected error occurred.';
+}
+?>

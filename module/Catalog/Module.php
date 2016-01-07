@@ -3,6 +3,8 @@
 namespace Catalog;
 
 use Catalog\Service\CatalogService;
+use Catalog\Controller\CatalogController;
+use Zend\Mvc\Controller\ControllerManager;
 class Module 
 {
 	public function getConfig()
@@ -31,6 +33,19 @@ class Module
                         );
 	            },
 	        ],
+	    ];
+	}
+	
+	public function getControllerConfig()
+	{
+	    return [
+    	    'factories' => [
+    	        'Catalog\Controller\Catalog' => function(ControllerManager $controllerManager) {
+    	            return new CatalogController(
+	                    $controllerManager->getServiceLocator()->get('Catalog\CatalogService')
+                    );
+    	        },
+    	    ],
 	    ];
 	}
 }

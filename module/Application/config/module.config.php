@@ -17,8 +17,8 @@ return array(
                 'options' => array(
                     'route'    => '/[index]',
                     'defaults' => array(
-                        'controller' => 'Catalog\Controller\ProductCategory',
-                        'action'     => 'viewCategory',
+                        'controller' => 'Catalog\Controller\Catalog',
+                        'action'     => 'viewCategories',
                     ),
                 ),
             ),

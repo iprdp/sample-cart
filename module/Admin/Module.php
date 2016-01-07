@@ -46,7 +46,8 @@ class Module
 	            'Admin\AdminCatalogService' => function($serviceLocator) {
 	                return new AdminCatalogService(
                         $serviceLocator->get('Catalog\CatalogService'),
-                        $serviceLocator->get('doctrine.entitymanager.orm_default')
+                        $serviceLocator->get('doctrine.entitymanager.orm_default'),
+                        $serviceLocator->get('Config')
                     );
 	            },
 	        ],
@@ -69,10 +70,12 @@ class Module
 	            'Admin\Controller\CatalogProduct' => function(ControllerManager $controllerManager) {
 	            $authService = $controllerManager->getServiceLocator()->get('Admin\AuthenticationService');
 	            $adminCatalogService = $controllerManager->getServiceLocator()->get('Admin\AdminCatalogService');
+	            $objectManager = $controllerManager->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 	            
 	            return new CatalogProductController(
 	                    $authService,
-	                    $adminCatalogService
+	                    $adminCatalogService,
+	                    $objectManager
                     );
 	            },
             ],

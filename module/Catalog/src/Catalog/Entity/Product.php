@@ -23,7 +23,7 @@ class Product
     private $id;
     
     /**
-     * @ORM\Column(name="title", type="string", length=100, unique=true, 
+     * @ORM\Column(name="title", type="string", length=200, unique=true, 
      *      nullable=false)
      * @var string
      */
@@ -37,7 +37,7 @@ class Product
     protected $make;
     
     /**
-     * @ORM\Column(name="model_no", type="string", length=100, unique=true, 
+     * @ORM\Column(name="model_no", type="string", length=50, unique=true, 
      *      nullable=false)
      * @var string
      */
@@ -62,6 +62,13 @@ class Product
      * @var float
      */
     protected $unitPrice;
+    
+    /**
+     * @ORM\Column(name="currency_code", type="string", length=10, 
+     *      nullable=false)
+     * @var string
+     */
+    protected $currencyCode;
     
     /**
      * @ORM\Column(name="display_img", type="string", length=30, unique=true, 
@@ -140,6 +147,16 @@ class Product
     public function setUnitPrice($unitPrice)
     {
         $this->unitPrice = $unitPrice;
+    }
+    
+    public function getCurrencyCode()
+    {
+        return $this->currencyCode;
+    }
+    
+    public function setCurrencyCode($currencyCode)
+    {
+        $this->currencyCode = $currencyCode;
     }
     
     public function getDisplayImage()

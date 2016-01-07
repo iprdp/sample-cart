@@ -5,32 +5,26 @@ namespace Catalog;
 return [
 	'router' => [ 
 		'routes' => [ 
-			'catalog_category' => [
-				'type' => 'literal',
+			'catalog_view_categories' => [
+				'type' => 'segment',
 				'options' => [
-					'route'    => '/category',
+					'route'    => '/categories[/:c_name[/:c_id]]',
 					'defaults' => [
-						'controller' => 'Catalog\Controller\ProductCategory',
-						'action'     => 'viewCategory',
+						'controller' => 'Catalog\Controller\Catalog',
+						'action'     => 'viewCategories',
 					],
 				],
 			],          
             'catalog_product' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
                     'route' => '/product',
                     'defaults' => [
-                        'controller' => 'Catalog\Controller\ProductCategory',
+                        'controller' => 'Catalog\Controller\Catalog',
                         'action'     => 'viewProduct',
                     ],
                 ],
             ],
-		],
-	],
-	'controllers' => [
-		'invokables' => [
-			'Catalog\Controller\ProductCategory' => 
-		                'Catalog\Controller\ProductCategoryController',
 		],
 	],
 	'view_manager' => [
