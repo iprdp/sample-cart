@@ -104,7 +104,7 @@ class Product
     
     public function getModelNumber()
     {
-        return $this->modelNumber();
+        return $this->modelNumber;
     }
     
     public function setModelNumber($modelNumber)

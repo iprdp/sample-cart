@@ -1,0 +1,41 @@
+<?php if (isset($this->products) && !empty($this->products)) :
+    $products = $this->products;
+?>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+    	<thead>
+			<tr>
+				<th style="width: 5%;" class="text-center">Id</th>
+				<th style="width: 15%;" class="text-center">Title</th>
+				<th style="width: 10%;" class="text-center">Catalog No.</th>
+				<th style="width: 10%;" class="text-center">Make</th>
+				<th style="width: 10%;" class="text-center">Model No.</th>
+				<th style="width: 10%;" class="text-center">Unit Price</th>
+				<th style="width: 30%;" class="text-center">Description</th>
+				<th style="width: 10%;" class="text-center">Primary Category</th>
+			</tr>
+		</thead>
+			    
+    	<tbody>
+    	<?php foreach ($products as $product) : ?>
+    		<tr>
+    			<td class="text-center"><?= $product->getId(); ?></td>
+    			<td><?= $product->getTitle(); ?></td>
+    			<td><?= $product->getCatalogNumber(); ?></td>
+    			<td><?= $product->getMake(); ?></td>
+    			<td><?= $product->getModelNumber(); ?></td>
+    			<td class="text-right"><?= $product->getUnitPrice(); ?></td>
+    			<td><?= $product->getDescription(); ?></td>
+    			<td>
+    				<?php if (is_object($category = $product->getPrimaryCategory())) : ?>
+    					<?= $category->getTitle(); ?>
+					<?php endif; ?>
+				</td>
+			</tr>
+    	<?php endforeach; ?>
+    	</tbody>
+    </table>
+ </div>
+ <?php endif; ?>
+ 

@@ -1,0 +1,45 @@
+<?php
+    if (isset($this->form)) : 
+        $form = $this->form;
+        $form->prepare();
+?>
+    <?= $this->form()->openTag($form); ?>
+    
+    <h3>Edit Product</h3>
+    
+    <?= $this->formElement($form->get('id')); ?>
+    
+    <div class="row">
+    	<div class="form-group">
+    		<?= $this->formLabel($form->get('title')); ?>
+    		<?= $this->formElement($form->get('title')); ?>
+    		<?= $this->formElementErrors($form->get('title')); ?>
+    	</div>
+    </div>
+    <div class="row">
+    	<div class="form-group">
+    		<?= $this->formLabel($form->get('catalogNumber')); ?>
+    		<?= $this->formElement($form->get('catalogNumber')); ?>
+    		<?= $this->formElementErrors($form->get('catalogNumber')); ?>
+    	</div>
+    	<div class="form-group">
+    		<?= $this->formLabel($form->get('make')); ?>
+    		<?= $this->formElement($form->get('make')); ?>
+    		<?= $this->formElementErrors($form->get('make')); ?>
+    	</div>
+    	<div class="form-group">
+    		<?= $this->formLabel($form->get('modelNumber')); ?>
+    		<?= $this->formElement($form->get('modelNumber')); ?>
+    		<?= $this->formElementErrors($form->get('modelNumber')); ?>
+    	</div>
+    </div>
+    <div class="row">
+    	<div class="form-group">
+    		<?= $this->formLabel($form->get('description')); ?>
+    		<?= $this->formElement($form->get('description')); ?>
+    		<?= $this->formElementErrors($form->get('description')); ?>
+    	</div>
+    </div>
+    
+    <?= $this->form()->closeTag(); ?>
+<?php endif; ?>

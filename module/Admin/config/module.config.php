@@ -30,18 +30,31 @@ return [
 		        'options' => [
 		            'route'    => '/admin/categories',
 		            'defaults' => [
-		                'controller' => 'Admin\Controller\Home',
+		                'controller' => 'Admin\Controller\CatalogProduct',
 		                'action'     => 'viewCategories',
 		            ],
 		        ],
 		    ],
-		    'admin_categories' => [
+		    'admin_products' => [
 		        'type' => 'literal',
 		        'options' => [
 		            'route'    => '/admin/products',
 		            'defaults' => [
-		                'controller' => 'Admin\Controller\Home',
+		                'controller' => 'Admin\Controller\CatalogProduct',
 		                'action'     => 'viewProducts',
+		            ],
+		        ],
+		    ],
+		    'admin_product_edit' => [
+		        'type' => 'segment',
+		        'options' => [
+		            'route'    => '/admin/product/:id',
+		            'contraints'    => [
+		                'id' => '[0-9]+',
+		            ],
+		            'defaults' => [
+		                'controller' => 'Admin\Controller\CatalogProduct',
+		                'action'     => 'editProduct',
 		            ],
 		        ],
 		    ],

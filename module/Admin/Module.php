@@ -6,7 +6,8 @@ use Zend\Mvc\Controller\ControllerManager;
 use Admin\Controller\HomeController;
 use Admin\Service\AuthenticationService;
 use Admin\Service\LoginService;
-use Admin\Service\HomeService;
+use Admin\Controller\CatalogProductController;
+use Admin\Service\AdminCatalogService;
 
 class Module 
 {
@@ -42,9 +43,10 @@ class Module
                        $serviceLocator->get('Admin\AuthenticationService')
                    );
 	            },
-	            'Admin\HomeService' => function($serviceLocator) {
-	                return new HomeService(
-                        $serviceLocator->get('Catalog\CatalogService')
+	            'Admin\AdminCatalogService' => function($serviceLocator) {
+	                return new AdminCatalogService(
+                        $serviceLocator->get('Catalog\CatalogService'),
+                        $serviceLocator->get('doctrine.entitymanager.orm_default')
                     );
 	            },
 	        ],
@@ -57,16 +59,21 @@ class Module
 	        'factories' => [
 	            'Admin\Controller\Home' => function(ControllerManager $controllerManager) {
 	               $authService = $controllerManager->getServiceLocator()->get('Admin\AuthenticationService');
-	               $objectManager = $controllerManager->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 	               $loginService = $controllerManager->getServiceLocator()->get('Admin\LoginService');
-	               $homeService = $controllerManager->getServiceLocator()->get('Admin\HomeService');
 	               
 	               return new HomeController(
                        $authService, 
-                       $objectManager, 
-                       $loginService,
-                       $homeService
+                       $loginService
                    );
+	            },
+	            'Admin\Controller\CatalogProduct' => function(ControllerManager $controllerManager) {
+	            $authService = $controllerManager->getServiceLocator()->get('Admin\AuthenticationService');
+	            $adminCatalogService = $controllerManager->getServiceLocator()->get('Admin\AdminCatalogService');
+	            
+	            return new CatalogProductController(
+	                    $authService,
+	                    $adminCatalogService
+                    );
 	            },
             ],
 	    ];
