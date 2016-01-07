@@ -27,10 +27,6 @@ return [
             ],
 		],
 	],
-	'service_manager' => [
-		'factories' => [
-		],
-	],
 	'controllers' => [
 		'invokables' => [
 			'Catalog\Controller\ProductCategory' => 

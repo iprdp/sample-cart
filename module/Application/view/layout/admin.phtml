@@ -20,9 +20,27 @@
         
             <div class="masthead">
                 <h3 class="text-muted">Sample cart - Admin</h3>
+                
+                <?php if ($this->identity()) : ?>
+      			<nav>
+                  <ul class="nav nav-justified">
+                    <li class="active">
+                    	<a href="<?= $this->url('admin_categories') ?>">
+                    		Categories
+                		</a>
+            		</li>
+                    <li>
+                    	<a href="<?= $this->url('admin_products') ?>">
+                    		Products
+                		</a>
+            		</li>
+                  </ul>
+                </nav>
+          		<?php endif;?>
+          		
           	</div>
-            
-            <?php echo $this->content; ?>
+          	
+          	<?php echo $this->content; ?>
             
             <hr>
             <footer>

@@ -25,6 +25,26 @@ return [
 		            ],
 		        ],
 		    ],
+		    'admin_categories' => [
+		        'type' => 'literal',
+		        'options' => [
+		            'route'    => '/admin/categories',
+		            'defaults' => [
+		                'controller' => 'Admin\Controller\Home',
+		                'action'     => 'viewCategories',
+		            ],
+		        ],
+		    ],
+		    'admin_categories' => [
+		        'type' => 'literal',
+		        'options' => [
+		            'route'    => '/admin/products',
+		            'defaults' => [
+		                'controller' => 'Admin\Controller\Home',
+		                'action'     => 'viewProducts',
+		            ],
+		        ],
+		    ],
 		],
 	],
 	'view_manager' => [

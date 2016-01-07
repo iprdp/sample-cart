@@ -2,6 +2,7 @@
 
 namespace Catalog;
 
+use Catalog\Service\CatalogService;
 class Module 
 {
 	public function getConfig()
@@ -18,5 +19,18 @@ class Module
                 ),
 			),
 		);
+	}
+	
+	public function getServiceConfig()
+	{
+	    return [
+	        'factories' => [
+	            'Catalog\CatalogService' => function($serviceLocator) {
+	                return new CatalogService(
+	                        $serviceLocator->get('doctrine.entitymanager.orm_default')
+                        );
+	            },
+	        ],
+	    ];
 	}
 }
