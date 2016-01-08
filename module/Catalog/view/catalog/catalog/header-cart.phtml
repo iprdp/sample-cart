@@ -1,5 +1,7 @@
+<?php $itemCount = (isset($this->itemCount) && is_numeric($this->itemCount)) 
+        ? intval($this->itemCount) : 0; ?>
 <div class="row">
 	<div class="pull-right">
-		<a href="#">View Cart</a>
+		<a href="<?= $this->url('cart_view_cart'); ?>">View Cart (<?= $itemCount; ?>)</a>
 	</div>
 </div>

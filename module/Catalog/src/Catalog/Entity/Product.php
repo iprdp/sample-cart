@@ -57,6 +57,12 @@ class Product
     protected $description;
     
     /**
+     * @ORM\Column(name="features", type="text", nullable=true)
+     * @var string
+     */
+    protected $features;
+    
+    /**
      * @ORM\Column(name="unit_price", type="float", precision=13, scale=3, 
      *      nullable=false)
      * @var float
@@ -137,6 +143,16 @@ class Product
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+    
+    public function getFeatures()
+    {
+        return $this->features;
+    }
+    
+    public function setFeatures($features)
+    {
+        $this->features = $features;
     }
     
     public function getUnitPrice()

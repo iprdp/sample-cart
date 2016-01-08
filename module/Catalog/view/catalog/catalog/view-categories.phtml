@@ -53,14 +53,19 @@ try {
 		<?php endif; ?>
 		<?php foreach ($listCategories as $category) : ?>
 			<?php foreach ($category->getProducts() as $product) : ?>
+				<?php $productUrl = $this->url('catalog_product', ['p_name' => $product->getTitle(), 'p_id' => $product->getId()]); ?>
     			<div class="row">
     				<div class="col-xs-12 col-sm-3 col-md-1">
-    					<img src="<?= $product->getDisplayImage(); ?>" class="img-thumbnail">
+    					<a href="<?= $productUrl; ?>">
+    						<img src="<?= $product->getDisplayImage(); ?>" class="img-thumbnail">
+						</a>
     					<br>
     					<span><?= $product->getUnitPrice(); ?></span>
     				</div>
     				<div class="col-xs-12 col-sm-6 col-md-8">
-    					<?= $product->getTitle(); ?>					
+    					<a href="<?= $productUrl; ?>">
+    						<?= $product->getTitle(); ?>
+						</a>					
     				</div>
     				<div class="col-xs-12 col-sm-3 col-md-1">
     					<input type="button" class="btn btn-default" value="Add to cart">

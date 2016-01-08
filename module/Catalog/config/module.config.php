@@ -20,7 +20,7 @@ return [
             'catalog_product' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/product',
+                    'route' => '/product[/:p_name[/:p_id]]',
                     'defaults' => [
                         'controller' => 'Catalog\Controller\Catalog',
                         'action'     => 'viewProduct',
@@ -34,6 +34,16 @@ return [
 		            'defaults' => [
 		                'controller' => 'Catalog\Controller\Cart',
 		                'action'     => 'viewCart',
+		            ],
+		        ],
+		    ],
+		    'cart_add_to_cart' => [
+		        'type' => 'segment',
+		        'options' => [
+		            'route' => '/add-to-cart',
+		            'defaults' => [
+		                'controller' => 'Catalog\Controller\Cart',
+		                'action'     => 'addToCart',
 		            ],
 		        ],
 		    ],

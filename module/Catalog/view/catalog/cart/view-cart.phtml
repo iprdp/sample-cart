@@ -1,0 +1,43 @@
+<?php 
+try {
+    if (isset($this->cart)) :
+        $cart = $this->cart;
+        $products = $this->products;
+?>
+<p><h3>My Cart</h3></p>
+<br>
+<?php foreach($cart->getProducts() as $productId => $quantity): ?>
+	<?php $product = (isset($products[$productId]) ? $products[$productId] : null);?>
+	<?php if (null == $product) : ?> 
+		<?php continue; ?>
+	<?php endif; ?>
+	<?php $productUrl = $this->url('catalog_product', ['p_name' => $product->getTitle(), 'p_id' => $product->getId()]); ?>
+    <div class="row">
+    	<div class="col-xs-12 col-sm-3 col-md-1">
+    		<a href="<?= $productUrl; ?>">
+    			<img src="<?= $product->getDisplayImage(); ?>" class="img-thumbnail">
+    		</a>
+    		<br>
+    		<span><?= $product->getUnitPrice(); ?></span>
+    	</div>
+    	<div class="col-xs-12 col-sm-6 col-md-8">
+    		<a href="<?= $productUrl; ?>">
+    			<?= $product->getTitle(); ?>
+    		</a>					
+    	</div>
+    	<div class="col-xs-12 col-sm-3 col-md-1">
+    		<?= $quantity; ?>
+    	</div>			
+    </div>
+<?php endforeach; ?>
+ <div class="row">
+	<div class="col-xs-12 col-sm-3 col-md-1">
+    	<input type="button" value="Checkout using Stripe" >
+	</div>
+</div>
+<?php
+    endif;
+} catch(\Exception $e) {
+    echo 'Unexpected error occurred';
+}
+?>

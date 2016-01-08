@@ -1,51 +1,103 @@
-<p><h3>Samsung - Gear VR for Select Samsung Cell Phones - Frost White</h3></p>
+<?php try {
+    if (isset($this->product)) :
+        $product = $this->product;
+?>
+<p><h3><?= $product->getTitle(); ?></h3></p>
 <br>
 <div class="row">
 	<div class="col-xs-6 col-md-4 text-center">
 		<img src="/img/4637800_ra.jpg" class="img-rounded"/>
+		<input type="hidden" name="product_id" id="product_id" value="<?= $product->getId(); ?>">
 	</div>
 	<div class="col-xs-12 col-md-8">
 		<p>
-			Samsung Gear VR for Select Samsung Cell Phones: Mobile virtual reality is finally here. Watch movies in your own private cinema, be at the center of your favorite games, and socialize with friends in a virtual world all your own. The lightweight design and intuitive touchpad drop you right in the action and allow for hours of immersive entertainment.
+			<?= $product->getDescription(); ?>
 		</p>
 		<div class="form-group">			
 			<label>Model:</label>
-			<span class="form-control-static">ABC123</span>
-			
-			<label>Customer Rating:</label>
-			<span class="form-control-static">4.5/5</span>
+			<span class="form-control-static"><?= $product->getModelNumber(); ?></span>
 		</div>
 		<div class="form-group">
 			<label for="">Quantity:</label>
-			<input type="text" name="quantity" size="3" value="1" />
+			<input type="text" name="quantity" id="quantity" size="3" value="1" />
 		</div>
 		<div class="form-group">
 			<label>Price:</label>
-			<span class="form-control-static">$99.99</span>
+			<span class="form-control-static"><?= $product->getUnitPrice(); ?></span>
 		</div>
-		<input type="button" class="btn btn-default" value="Add to cart" />
+		<input type="button" class="btn btn-default" id="addToCartB" value="Add to cart" />
 	</div>
 </div>
 <div class="row">
 	<h4>Product Features</h4>
-	<p>
-		Compatible with select Samsung phones
-        Including Galaxy Note5, Galaxy S6 edge+, Galaxy S6 and Galaxy S6 edge. Galaxy S6 edge+ and Galaxy Note5 require a software update from your carrier.
-        Purchase and watch hundreds of movies and TV shows from Oculus Video
-        Plus, stream over 1 million short films and videos from Vimeo.
-        Watch Netflix in a whole new way
-        The Netflix app on Gear VR offers a living room experience, so it feels like you're on your couch watching TV shows, movies and more, wherever you are.
-        Purchase and play premium games
-        Plus, keep up with the best gamers in Twitch.
-        Enjoy extra comfort and durability
-        Light, ergonomic design features a wide facial interface, flexible padding and an easy-to-use touchpad. Plus, it fits over most eyeglasses.
-        © 2015 Samsung Electronics America, Inc. Samsung, Galaxy, Note, Gear, Samsung Milk VR, and Super AMOLED are all trademarks owned or registered by Samsung Electronics Co., Ltd.
-        Other company names, product names, and marks mentioned are property of their respective owners and may be registered trademarks. Any screen images simulated. Actual appearance may vary.
-        Use only in a safe environment. The Gear VR produces a distracting, immersive virtual reality experience that blocks your view of your actual surroundings. Read and follow warnings and instructions included with the Headset before use.
-        The Headset should be calibrated before each use. Not for use by children under 13. A virtual reality experience may trigger health reactions. See a doctor before use if you have a history of seizures. Stop use if you experience a health reaction.
-        Always be aware of your surroundings when using the Gear VR. Remain seated or stationary at all times.
-        Take special care to ensure that you are not near other people, objects, stairs, balconies, windows, furniture, or other items that you can bump into or knock down when using — or immediately after using — the Gear VR headset.
-        Do not handle sharp or otherwise dangerous objects while using the Gear VR. Never wear the Gear VR in situations that require attention, such as walking, bicycling, or driving.
-        Some apps and services such as Netflix require payment or subscriptions to use. Charges may apply.
-    </p>
+	<p><?= $product->getFeatures(); ?></p>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('input#addToCartB').on('click', ProdMethods.addToCartClick);
+});
+
+ProdMethods = {};
+
+ProdMethods.addToCartClick = function(event) {
+	event.preventDefault();
+	event.stopPropagation();
+
+	if (!ProdMethods.validate()) {
+		return false;
+	}
+
+	var productId = $('input#product_id').val();
+	var quantity = $('input#quantity').val();
+	var url = "<?= $this->url('cart_add_to_cart'); ?>";
+	var data = {
+            product_id: productId,
+            quantity: quantity
+        };
+    var button = $(this);
+
+        $.ajax( {
+        	async: true,
+            cache: false,
+            type: 'POST',
+            url: url,
+            dataType: 'json',
+            data: data,
+            processData: true,
+            beforeSend: function() {
+                button.attr('disabled', 'disabled');
+            }
+        }).done( function( data ) {
+            if ( data.success === true ) {
+                window.location.reload();
+            } else {
+                alert('Unexpected error occurred');
+            }
+        }).fail( function() {
+        }).always( function() {
+        	button.removeAttr('disabled');
+
+        } );
+	
+};
+	
+ProdMethods.validate = function() {
+	if (isNaN(parseInt($('input#quantity').val()))) {
+		alert('Invalid quantity value');
+		return false;
+	}
+
+	return true;
+}
+
+</script>
+
+
+
+<?php 
+    endif;
+} catch(\Exception $e) {
+    echo 'Unexpected error occurred';
+}
+?>

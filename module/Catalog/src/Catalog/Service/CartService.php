@@ -5,6 +5,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use Catalog\Entity\Cart;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Util\Debug;
 
 class CartService
 {
@@ -15,9 +16,29 @@ class CartService
         $this->objectManager = $objectManager;
     }
     
-    public function processViewCart(ViewModel $viewModel)
+    public function getItemCount()
     {
         $cart = $this->getCart();
+        
+        return sizeof($cart->getProducts());
+    }
+    
+    public function processViewCart(ViewModel $viewModel)
+    {
+        $products = array();
+        $cart = $this->getCart();
+        $productIds = array_keys($cart->getProducts());
+        $productObjects = $this->getObjectManager()->getRepository('Catalog\Entity\Product')->findBy([
+            'id' => $productIds,
+        ]);
+        foreach($productObjects as $product) {
+            $products[$product->getId()] = $product;
+        }
+        
+        $viewModel->setVariables([
+            'cart' => $cart,
+            'products' => $products,
+        ]);
     }
     
     public function processAddToCart($postData, ViewModel $viewModel)

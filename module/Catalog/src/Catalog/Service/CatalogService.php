@@ -35,6 +35,21 @@ class CatalogService
         }
     }
     
+    public function processViewProduct($productId, ViewModel $viewModel)
+    {
+        $product = null;
+        if (is_numeric($productId)) {
+            $product = $this->getObjectManager()->find(
+                'Catalog\Entity\Product',
+                $productId
+            );
+        }
+    
+        if (isset($product)) {
+            $viewModel->setVariable('product', $product);
+        } 
+    }
+    
     public function getProductCategories()
     {
         return $this->getObjectManager()

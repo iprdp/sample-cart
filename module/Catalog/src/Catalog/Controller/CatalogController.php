@@ -18,7 +18,6 @@ class CatalogController extends AbstractActionController
 	public function viewCategoriesAction() 
 	{
 	    $viewModel = new ViewModel();
-	    $request = $this->getRequest();
 	    $categoryId = $this->params()->fromRoute('c_id');
 	    
 	    $this->getCatalogService()->processViewCategories($categoryId, $viewModel);
@@ -28,7 +27,12 @@ class CatalogController extends AbstractActionController
 	
 	public function viewProductAction()
 	{
-	    return new ViewModel();
+	    $viewModel = new ViewModel();
+	    $productId = $this->params()->fromRoute('p_id');
+	     
+	    $this->getCatalogService()->processViewProduct($productId, $viewModel);
+	     
+	    return $viewModel;
 	}
 	
 	protected function setCatalogService($catalogService)

@@ -22,8 +22,6 @@ class CartController extends AbstractActionController
 	public function viewCartAction() 
 	{
 	    $viewModel = new ViewModel();
-	    $request = $this->getRequest();
-	    
 	    $this->getCartService()->processViewCart($viewModel);
 	    
 	    return $viewModel;
