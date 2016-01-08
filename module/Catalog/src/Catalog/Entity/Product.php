@@ -77,7 +77,7 @@ class Product
     protected $currencyCode;
     
     /**
-     * @ORM\Column(name="display_img", type="string", length=30, unique=true, 
+     * @ORM\Column(name="display_img", type="string", length=250, unique=true, 
      *      nullable=false)
      * @var string
      */

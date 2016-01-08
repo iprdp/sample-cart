@@ -14,3 +14,5 @@ config/testing.config.php
 vendor
 vendor/*
 data/DoctrineORMModule/*
+php.ini
+error_log

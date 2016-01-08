@@ -51,7 +51,6 @@ class AdminCatalogService
     
     public function saveProduct(Product $product)
     {
-        $fileUploadSuccess = true;
         $fileData = $product->getDisplayImage();
         
         if (is_array($fileData) && !empty($fileData)) {
@@ -65,9 +64,9 @@ class AdminCatalogService
                 if (is_string($extension) && (strlen($extension) > 0)) {
                     $newFileName = $tmpFileName . '.' . $extension;
                 }
-                $newFilePath = $productImagePath = '/data/uploaded-files/products/images/' . $newFileName;
+                $newFilePath = '/data/uploaded-files/products/images/' . $newFileName;
+                $productImagePath = '/wwwup/products/images/' . $newFileName;
                 $newFilePath = $appBaseDir . $newFilePath;
-                
                 
                 $fileUploadSuccess = $this->moveFile($tmpFilePath, $newFilePath);
                 if ($fileUploadSuccess) {
@@ -80,6 +79,11 @@ class AdminCatalogService
                     throw new \DomainException('File upload failed');
                 }
             }
+        }
+        
+        $displayImage = $product->getDisplayImage();
+        if (is_array($displayImage)) {
+            $product->setDisplayImage('');
         }
         
         $this->getObjectManager()->persist($product);
