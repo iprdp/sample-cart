@@ -6,7 +6,7 @@
 <br>
 <div class="row">
 	<div class="col-xs-6 col-md-4 text-center">
-		<img src="/img/4637800_ra.jpg" class="img-rounded"/>
+		<img src="<?= $product->getDisplayImage(); ?>" class="img-rounded"/>
 		<input type="hidden" name="product_id" id="product_id" value="<?= $product->getId(); ?>">
 	</div>
 	<div class="col-xs-12 col-md-8">

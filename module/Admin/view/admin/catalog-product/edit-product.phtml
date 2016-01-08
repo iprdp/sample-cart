@@ -4,6 +4,7 @@ try {
     if (isset($this->form)) : 
         $form = $this->form;
         $form->prepare();
+        $product = $form->getObject();
 ?>
     <?= $this->form()->openTag($form); ?>
     
@@ -68,7 +69,7 @@ try {
     </div>
     <div class="row">
     	<div class="form-group col-xs-12">
-    		<img src="<?= $form->get('displayImage')->getValue(); ?>" 
+    		<img src="<?= $product->getDisplayImage(); ?>" 
 					class="img-rounded">
     	</div>
     	<div class="form-group col-xs-12">
