@@ -2,6 +2,8 @@
 
 namespace Catalog;
 
+use Catalog\View\Helper\HeaderCart;
+
 return [
 	'router' => [ 
 		'routes' => [ 
@@ -25,8 +27,25 @@ return [
                     ],
                 ],
             ],
+		    'cart_view_cart' => [
+		        'type' => 'segment',
+		        'options' => [
+		            'route' => '/cart',
+		            'defaults' => [
+		                'controller' => 'Catalog\Controller\Cart',
+		                'action'     => 'viewCart',
+		            ],
+		        ],
+		    ],
 		],
 	],
+    'view_helpers' => [
+        'factories' => [
+            'headerCart' => function() {
+                return new HeaderCart();
+            },
+        ],
+    ],
 	'view_manager' => [
         'template_path_stack' => [
             'catalog' => __DIR__ . '/../view',

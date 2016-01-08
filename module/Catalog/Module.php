@@ -5,6 +5,9 @@ namespace Catalog;
 use Catalog\Service\CatalogService;
 use Catalog\Controller\CatalogController;
 use Zend\Mvc\Controller\ControllerManager;
+use Catalog\Controller\CartController;
+use Catalog\Service\CartService;
+
 class Module 
 {
 	public function getConfig()
@@ -32,6 +35,11 @@ class Module
 	                        $serviceLocator->get('doctrine.entitymanager.orm_default')
                         );
 	            },
+	            'Catalog\CartService' => function($serviceLocator) {
+                    return new CartService(
+                        $serviceLocator->get('doctrine.entitymanager.orm_default')
+                    );
+	            },
 	        ],
 	    ];
 	}
@@ -44,6 +52,12 @@ class Module
     	            return new CatalogController(
 	                    $controllerManager->getServiceLocator()->get('Catalog\CatalogService')
                     );
+    	        },
+    	        'Catalog\Controller\Cart' => function(ControllerManager $controllerManager) {
+    	        return new CartController(
+	                $controllerManager->getServiceLocator()->get('Catalog\CatalogService'),
+	                $controllerManager->getServiceLocator()->get('Catalog\CartService')
+                );
     	        },
     	    ],
 	    ];
